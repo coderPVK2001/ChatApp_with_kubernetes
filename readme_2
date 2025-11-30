@@ -1,0 +1,40 @@
+
+Steps for k8s project :- 
+
+Note :- 
+open docker desktop --> login into it ---> minikube start now 
+
+1) clone this into your local machine  .
+
+2) create a docker image for backend and frontend locally and push it to docker hub so u can use it into your container image
+
+commands :- 
+got to backend path
+docker build -t "username"/"repo-name":"tagname" .    
+
+eg:- 
+docker build -t pvk1036/chatapp-backend:latest  //local image builded 
+same for frontend as well.
+
+docker push pvk1036/chatapp-backend:latest  //will push to hub
+
+Note:- 
+as we logged into docker desktop no need to login 
+optional --> go to docker hub and create token for username password and log into termminal so u can push into docker hub
+
+3)Now start your project creation
+
+Namespace --> Storage --> service --> deployment 
+
+STEPS-->
+i) create namespace
+
+ii) create pv for mongo:- 
+kubectl get pv
+-->
+kubectl get pv
+NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+mongo-pv   5Gi        RWO            Retain           Available                          <unset>                          4m26s
+
+
+
