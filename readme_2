@@ -29,12 +29,27 @@ Namespace --> Storage --> service --> deployment
 STEPS-->
 i) create namespace
 
-ii) create pv for mongo:- 
+ii) MONGO --->
+
+create pv for mongo:---
 kubectl get pv
 -->
 kubectl get pv
 NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
 mongo-pv   5Gi        RWO            Retain           Available                          <unset>                          4m26s
+
+create pvc for mongo now  :---
+kubectl get pvc
+
+create deployment.yml for mongodb 
+
+Enter into shell now to test mongo is working fine or not :--
+
+kubectl exec -it "podname" -n chat-app -- bash
+mongosh -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin  //for login using mongosh
+show dbs 
+show collections
+
 
 
 
