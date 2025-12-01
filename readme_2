@@ -50,6 +50,8 @@ mongosh -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --auth
 show dbs 
 show collections
 
+Note :- To see mountpaths or total storage inside minikube cluster :- minikube ssh ---> df -kh --> u will see now --> exit
+
 
 
 
