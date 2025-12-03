@@ -54,6 +54,8 @@ Note :- To see mountpaths or total storage inside minikube cluster :- minikube s
 
 iii) Frontend --->
 
+to see pods and svc in current namespace :- kubectl get svc frontend -n chat-app
+
 while created service and deployment of frontend got below error in pod:- 
 
 PS C:\Users\Prajwal\OneDrive\Desktop\programs\Kubernetes projects\ChatApp_with_kubernetes> kubectl logs frontend-deployment-65b687ff-kw6qf -n chat-app
