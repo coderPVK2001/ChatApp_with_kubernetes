@@ -71,6 +71,27 @@ error: the server doesn't have a resource type "deploymment"
 Trooubleshoot :- saw dockerfile ==> u will see nginx.conf is copied into docker container path inside this file backend api is required to listen on 5001 port so 
 backend service deployed and then frontend worked properly.
 
+iv) Backend -->
+
+Backend deployed properly svc and deployments
+
+v) Now RUN your application :-              
+
+Do port forwarding to access app on local 
+FRONTEND :---- kubectl port-forward service/frontend-service -n chat-app 80:80
+BACKEND  :---- kubectl port-forward service/backend -n chat-app 5001:5001      
+Note :- both should run in other terminals so to use both services
+
+APPLICATION ACCESS SUCCESSFUL =============> localhost:80
+
+Error :- now getting internal server error while creating new account 
+see backend pod logs will understand error properly as we havent added mongo url properly in backend env deployment
+Note :- see readme of github project they mentioned about what to add in env
+
+
+vi) APPLICATION running succesfully
+
+signup in one browser and other user in other browser and now chat with each other
 
 
 
