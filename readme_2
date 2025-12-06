@@ -4,6 +4,11 @@ Steps for k8s project :-
 Note :- 
 open docker desktop --> login into it ---> minikube start now 
 
+creation flow :- 
+namespace --> deployment --> service 
+
+how the 
+
 1) clone this into your local machine  .
 
 2) create a docker image for backend and frontend locally and push it to docker hub so u can use it into your container image
@@ -92,6 +97,14 @@ Note :- see readme of github project they mentioned about what to add in env
 vi) APPLICATION running succesfully
 
 signup in one browser and other user in other browser and now chat with each other
+
+To access application using other domain instead of localhost steps :-  (hosts file changes in linux :- /etc/hosts ADD 127.0.0.1 chatpvk.com) 
+in windows :- notepad (RUN as ADMIN) ===> ctrl + O ==> C:\Windows\System32\drivers\etc (select All files instead of .txt) (u will see hosts file here) 
+==> add changes like above in linu and save ===> command prompt ==> ipconfig /flushdns ==> http://chatpvk.com/login
+Note :- will able to access now but token issue telling
+
+
+
 
 
 
