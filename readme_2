@@ -103,8 +103,36 @@ in windows :- notepad (RUN as ADMIN) ===> ctrl + O ==> C:\Windows\System32\drive
 ==> add changes like above in linu and save ===> command prompt ==> ipconfig /flushdns ==> http://chatpvk.com/login
 Note :- will able to access now but token issue telling
 
+vii) USE ingress for external access from one IP only instead of multiple services:- 
 
+first need to download ingress controller for using ingress :- 
+command ;- minikube addons enable ingress
 
+kubectl get ns :- 
+NAME                   STATUS   AGE
+chat-app               Active   5d18h
+default                Active   6d
+ingress-nginx          Active   2m8s
+kube-node-lease        Active   6d
+kube-public            Active   6d
+kube-system            Active   6d
+kubernetes-dashboard   Active   6d
+
+kubectl get svc -n ingress-nginx
+NAME                                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             NodePort    10.96.107.145   <none>        80:31320/TCP,443:31563/TCP   34m
+ingress-nginx-controller-admission   ClusterIP   10.110.43.201   <none>        443/TCP                      34m
+
+u will see nginx controller added now
+
+- now create ingress for namepace chat-app and apply 
+
+if not works then:- 
+kubectl delete all --all -n chat-app
+kubectl apply -f "dir-name"
+
+//for ingress needs to port forward below one so it will redirect our ingress of namespace chat-app
+kubectl port-forward services/ingress-nginx-controller -n ingress-nginx 80:80 
 
 
 
