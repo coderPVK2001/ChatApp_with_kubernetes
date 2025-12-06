@@ -1,0 +1,138 @@
+
+Steps for k8s project :- 
+
+Note :- 
+open docker desktop --> login into it ---> minikube start now 
+
+creation flow :- 
+namespace --> deployment --> service 
+
+how the 
+
+1) clone this into your local machine  .
+
+2) create a docker image for backend and frontend locally and push it to docker hub so u can use it into your container image
+
+commands :- 
+got to backend path
+docker build -t "username"/"repo-name":"tagname" .    
+
+eg:- 
+docker build -t pvk1036/chatapp-backend:latest  //local image builded 
+same for frontend as well.
+
+docker push pvk1036/chatapp-backend:latest  //will push to hub
+
+Note:- 
+as we logged into docker desktop no need to login 
+optional --> go to docker hub and create token for username password and log into termminal so u can push into docker hub
+
+3)Now start your project creation
+
+Namespace --> Storage --> service --> deployment 
+
+STEPS-->
+i) create namespace
+
+ii) MONGO --->
+
+create pv for mongo:---
+kubectl get pv
+-->
+kubectl get pv
+NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+mongo-pv   5Gi        RWO            Retain           Available                          <unset>                          4m26s
+
+create pvc for mongo now  :---
+kubectl get pvc
+
+create deployment.yml for mongodb 
+
+Enter into shell now to test mongo is working fine or not :--
+
+kubectl exec -it "podname" -n chat-app -- bash
+mongosh -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin  //for login using mongosh
+show dbs 
+show collections
+
+Note :- To see mountpaths or total storage inside minikube cluster :- minikube ssh ---> df -kh --> u will see now --> exit
+
+iii) Frontend --->
+
+to see pods and svc in current namespace :- kubectl get svc frontend -n chat-app
+
+while created service and deployment of frontend got below error in pod:- 
+
+PS C:\Users\Prajwal\OneDrive\Desktop\programs\Kubernetes projects\ChatApp_with_kubernetes> kubectl logs frontend-deployment-65b687ff-kw6qf -n chat-app
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+nginx: [emerg] host not found in upstream "backend" in /etc/nginx/conf.d/default.conf:15
+error: the server doesn't have a resource type "deploymment"
+
+Trooubleshoot :- saw dockerfile ==> u will see nginx.conf is copied into docker container path inside this file backend api is required to listen on 5001 port so 
+backend service deployed and then frontend worked properly.
+
+iv) Backend -->
+
+Backend deployed properly svc and deployments
+
+v) Now RUN your application :-              
+
+Do port forwarding to access app on local 
+FRONTEND :---- kubectl port-forward service/frontend-service -n chat-app 80:80
+BACKEND  :---- kubectl port-forward service/backend -n chat-app 5001:5001      
+Note :- both should run in other terminals so to use both services
+
+APPLICATION ACCESS SUCCESSFUL =============> localhost:80
+
+Error :- now getting internal server error while creating new account 
+see backend pod logs will understand error properly as we havent added mongo url properly in backend env deployment
+Note :- see readme of github project they mentioned about what to add in env
+
+
+vi) APPLICATION running succesfully
+
+signup in one browser and other user in other browser and now chat with each other
+
+To access application using other domain instead of localhost steps :-  (hosts file changes in linux :- /etc/hosts ADD 127.0.0.1 chatpvk.com) 
+in windows :- notepad (RUN as ADMIN) ===> ctrl + O ==> C:\Windows\System32\drivers\etc (select All files instead of .txt) (u will see hosts file here) 
+==> add changes like above in linu and save ===> command prompt ==> ipconfig /flushdns ==> http://chatpvk.com/login
+Note :- will able to access now but token issue telling
+
+vii) USE ingress for external access from one IP only instead of multiple services:- 
+
+first need to download ingress controller for using ingress :- 
+command ;- minikube addons enable ingress
+
+kubectl get ns :- 
+NAME                   STATUS   AGE
+chat-app               Active   5d18h
+default                Active   6d
+ingress-nginx          Active   2m8s
+kube-node-lease        Active   6d
+kube-public            Active   6d
+kube-system            Active   6d
+kubernetes-dashboard   Active   6d
+
+kubectl get svc -n ingress-nginx
+NAME                                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             NodePort    10.96.107.145   <none>        80:31320/TCP,443:31563/TCP   34m
+ingress-nginx-controller-admission   ClusterIP   10.110.43.201   <none>        443/TCP                      34m
+
+u will see nginx controller added now
+
+- now create ingress for namepace chat-app and apply 
+
+if not works then:- 
+kubectl delete all --all -n chat-app
+kubectl apply -f "dir-name"
+
+//for ingress needs to port forward below one so it will redirect our ingress of namespace chat-app
+kubectl port-forward services/ingress-nginx-controller -n ingress-nginx 80:80 
+
+
+
