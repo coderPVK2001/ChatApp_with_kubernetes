@@ -6,23 +6,21 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
+    matchLabels: 
       app: frontend
   template:
     metadata:
       name: frontend-pod
       namespace: chat-app
-      labels: 
+      labels:
         app: frontend
     spec:
       containers:
-      - name: chatapp-frontend
-        image: trainwithshubham/chatapp-frontend:latest
+      - name: chatapp-frontend-image
+        image: pvk1036/frontend:latest
         ports:
         - containerPort: 80
         env:
         - name: NODE_ENV
           value: production
-
-
-
+    
